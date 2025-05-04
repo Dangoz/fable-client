@@ -1,4 +1,4 @@
-import AmbientParticles from '@/components/rtf/AmbientParticles'
+import AmbientParticles from '@/components/rtf/ambient-particles'
 
 export default function Home() {
   return (
