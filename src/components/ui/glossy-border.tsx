@@ -83,26 +83,7 @@ const glossyGlowVariants = cva('absolute inset-0 pointer-events-none', {
   },
 })
 
-const glossyInnerVariants = cva('w-full overflow-auto relative z-10 dark:border border-[0.5px]', {
-  variants: {
-    size: {
-      sm: 'p-1 lg:p-1.5 rounded-md',
-      md: 'p-1.5 lg:p-3 rounded-2xl',
-      lg: 'p-2.5 lg:p-5 rounded-3xl',
-    },
-    variant: {
-      default: 'bg-card/90 dark:border-white/10 border-black/5',
-      purple: 'bg-card/90 dark:border-purple-500/10 border-purple-500/10',
-      blue: 'bg-card/90 dark:border-blue-500/10 border-blue-500/10',
-      primary: 'bg-card/90 dark:border-primary/10 border-primary/10',
-      foreground: 'bg-card/90 dark:border-foreground/10 border-foreground/5',
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-    variant: 'default',
-  },
-})
+const glossyInnerVariants = cva('w-full relative z-10')
 
 interface GlossyBorderProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof glossyBorderVariants> {
   children: React.ReactNode
@@ -128,7 +109,7 @@ function GlossyBorder({
       {...props}
     >
       <div className={cn(glossyGlowVariants({ variant, size }), glowClassName)} />
-      <div className={cn(glossyInnerVariants({ variant, size }), innerClassName)}>{children}</div>
+      <div className={cn(glossyInnerVariants(), innerClassName)}>{children}</div>
     </div>
   )
 }
