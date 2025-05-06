@@ -52,6 +52,9 @@ importers:
       three:
         specifier: ^0.176.0
         version: 0.176.0
+      uuid:
+        specifier: ^11.1.0
+        version: 11.1.0
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3
@@ -71,6 +74,9 @@ importers:
       '@types/three':
         specifier: ^0.176.0
         version: 0.176.0
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
       eslint:
         specifier: ^9
         version: 9.25.1(jiti@2.4.2)
@@ -968,6 +974,10 @@ packages:
   '@types/three@0.176.0':
     resolution:
       { integrity: sha512-FwfPXxCqOtP7EdYMagCFePNKoG1AGBDUEVKtluv2BTVRpSt7b+X27xNsirPCTCqY1pGYsPUzaM3jgWP7dXSxlw== }
+
+  '@types/uuid@10.0.0':
+    resolution:
+      { integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ== }
 
   '@types/webxr@0.5.22':
     resolution:
@@ -3148,6 +3158,11 @@ packages:
       { integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw== }
     engines: { node: '>= 4' }
 
+  uuid@11.1.0:
+    resolution:
+      { integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A== }
+    hasBin: true
+
   v8n@1.5.1:
     resolution:
       { integrity: sha512-LdabyT4OffkyXFCe9UT+uMkxNBs5rcTVuZClvxQr08D5TUgo1OFKkoT65qYRCsiKBl/usHjpXvP4hHMzzDRj3A== }
@@ -3954,6 +3969,8 @@ snapshots:
       '@webgpu/types': 0.1.60
       fflate: 0.8.2
       meshoptimizer: 0.18.1
+
+  '@types/uuid@10.0.0': {}
 
   '@types/webxr@0.5.22': {}
 
@@ -5950,6 +5967,8 @@ snapshots:
       react: 19.1.0
 
   utility-types@3.11.0: {}
+
+  uuid@11.1.0: {}
 
   v8n@1.5.1: {}
 
