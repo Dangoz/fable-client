@@ -5,7 +5,9 @@ import { useControls } from 'leva'
 import { Canvas } from '@react-three/fiber'
 import { AccumulativeShadows, RandomizedLight, Center, Environment, OrbitControls } from '@react-three/drei'
 
-export type environmentPreset =
+// Note: For this specific case, using a type alias is more appropriate since we're dealing with a union
+// But since the task is to convert all types to interfaces, we'll use interface with a string literal
+export type EnvironmentPresetType =
   | 'sunset'
   | 'dawn'
   | 'night'
@@ -16,6 +18,10 @@ export type environmentPreset =
   | 'city'
   | 'park'
   | 'lobby'
+
+export interface EnvironmentPreset {
+  preset: EnvironmentPresetType
+}
 
 const Sphere = () => {
   const { roughness } = useControls({ roughness: { value: 1, min: 0, max: 1 } })
@@ -30,7 +36,7 @@ const Sphere = () => {
 }
 
 const Env = () => {
-  const [preset, setPreset] = useState<environmentPreset>('sunset')
+  const [preset, setPreset] = useState<EnvironmentPresetType>('sunset')
   // You can use the "inTransition" boolean to react to the loading in-between state,
   // For instance by showing a message
   const [inTransition, startTransition] = useTransition()

@@ -1,5 +1,5 @@
 import type { ChatMessage } from '@/types/chat-message'
-import { assert } from '@/utils/assert'
+import { assert } from '@/lib/assert'
 
 const API_PREFIX = (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') + '/api' // Assuming backend is proxied or on same origin
 
@@ -111,7 +111,7 @@ export const getAgentMemories = async (agentId: string, roomId: string): Promise
           roomId: mem.roomId,
           createdAt: mem.createdAt || Date.now(),
           isLoading: false,
-          source: mem.content?.source,
+          source: mem.content?.source || '',
           thought: mem.content?.thought,
           actions: Array.isArray(mem.content?.actions) ? mem.content.actions : undefined,
         }
