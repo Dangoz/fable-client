@@ -13,7 +13,10 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.0.1",
+    "@privy-io/react-auth": "^2.13.0",
     "@radix-ui/react-dialog": "^1.1.11",
+    "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-slot": "^1.2.0",
     "@react-three/drei": "^10.0.7",
     "@react-three/fiber": "^9.1.2",
@@ -25,10 +28,12 @@
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.56.2",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
     "three": "^0.176.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
