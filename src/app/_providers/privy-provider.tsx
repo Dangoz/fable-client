@@ -22,6 +22,7 @@ const PrivyProvider = ({ children }: { children: React.ReactNode }) => {
         appearance: {
           theme: 'dark',
           walletChainType: 'solana-only',
+          walletList: ['phantom', 'solflare', 'detected_solana_wallets', 'wallet_connect'],
         },
       }}
     >
