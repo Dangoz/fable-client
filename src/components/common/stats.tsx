@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { truncateWalletAddress } from '@/lib/utils'
 import { Copy, Check } from 'lucide-react'
-import { toast } from 'sonner'
 
 const Stats = () => {
   const { authenticated, user } = usePrivy()
@@ -13,7 +12,6 @@ const Stats = () => {
   const copyToClipboard = (text: string, itemId: string) => {
     navigator.clipboard.writeText(text)
     setCopiedItemId(itemId)
-    toast.success('Copied to clipboard')
     setTimeout(() => setCopiedItemId(null), 2000)
   }
 

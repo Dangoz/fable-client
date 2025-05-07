@@ -1,11 +1,19 @@
-import { usePrivy } from '@privy-io/react-auth'
+import { usePrivy, useConnectOrCreateWallet } from '@privy-io/react-auth'
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/menu/user-avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LogIn } from 'lucide-react'
 
 const UserConnection = () => {
-  const { ready, authenticated, user, login, logout, connectOrCreateWallet, connectWallet } = usePrivy()
+  const { ready, authenticated } = usePrivy()
+  const { connectOrCreateWallet } = useConnectOrCreateWallet({
+    onSuccess: ({ wallet }) => {
+      console.log(wallet)
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
 
   if (!ready) {
     return <Skeleton className="h-7 w-10 border rounded-lg" />
