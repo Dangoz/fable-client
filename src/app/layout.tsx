@@ -1,16 +1,18 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Cinzel, Atkinson_Hyperlegible } from 'next/font/google'
 import './globals.css'
 import Providers from './providers'
 import Menu from '@/components/menu/menu'
+import { Toaster } from '@/components/ui/sonner'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const atkinsonHyperlegible = Atkinson_Hyperlegible({
   subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const cinzel = Cinzel({
+  variable: '--font-cinzel',
   subsets: ['latin'],
 })
 
@@ -26,10 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${atkinsonHyperlegible.className} ${cinzel.variable} antialiased font-sans`}>
         <Providers>
           {children}
           <Menu />
+          <Toaster />
         </Providers>
       </body>
     </html>
