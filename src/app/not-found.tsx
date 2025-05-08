@@ -12,7 +12,7 @@ export default async function NotFound() {
             alt="404 Not Found"
             width={300}
             height={200}
-            className="mx-auto rounded-lg shadow-[0_0_15px_rgba(138,43,226,0.6)]"
+            className="mx-auto rounded-lg shadow-lg shadow-indigo-500/30 dark:shadow-indigo-400/20"
             priority
           />
         </div>
