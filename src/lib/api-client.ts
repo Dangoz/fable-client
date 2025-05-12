@@ -17,17 +17,17 @@ interface BackendMemory {
     thought?: string
     actions?: string[]
     // other potential fields from backend Content
-    [key: string]: any
+    [key: string]: unknown
   }
   metadata?: {
     entityName?: string
     // other potential metadata
-    [key: string]: any
+    [key: string]: unknown
   }
   createdAt: number
   worldId?: string
   // other potential fields from backend Memory
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /**
