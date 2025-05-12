@@ -39,7 +39,7 @@ const Env = () => {
   const [preset, setPreset] = useState<EnvironmentPresetType>('sunset')
   // You can use the "inTransition" boolean to react to the loading in-between state,
   // For instance by showing a message
-  const [inTransition, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const { blur } = useControls({
     blur: { value: 0.65, min: 0, max: 1 },
     preset: {
