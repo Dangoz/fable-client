@@ -33,7 +33,7 @@ interface BackendMemory {
 /**
  * Basic fetch wrapper
  */
-const fetcher = async (url: string, options: RequestInit = {}): Promise<any> => {
+const fetcher = async (url: string, options: RequestInit = {}): Promise<unknown> => {
   const fullUrl = API_PREFIX + (url.startsWith('/') ? url : `/${url}`)
   console.log(`[API Client] Fetching: ${options.method || 'GET'} ${fullUrl}`)
   try {
@@ -75,7 +75,15 @@ export const getAgentMemories = async (agentId: string, roomId: string): Promise
   try {
     // Use the specific room ID provided
     const url = `/agents/${agentId}/rooms/${roomId}/memories`
-    const response = await fetcher(url)
+    const response = (await fetcher(url)) as
+      | string
+      | {
+          success: boolean
+          data?: {
+            memories: BackendMemory[]
+          }
+          error?: string
+        }
 
     // Validate response structure (basic)
     assert(
