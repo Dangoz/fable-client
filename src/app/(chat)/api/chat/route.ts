@@ -5,11 +5,20 @@ import { cookies } from 'next/headers'
 import { z } from 'zod'
 import { constructCharacterSystem } from '@/lib/ai/character-system'
 export const maxDuration = 30
+import { PrivyClient } from '@privy-io/server-auth'
+
+// Initialize Privy client with app ID and secret from environment variables
+const privy = new PrivyClient(process.env.PRIVY_APP_ID as string, process.env.PRIVY_APP_SECRET as string)
 
 export async function POST(req: Request) {
   try {
     const cookieStore = await cookies()
-    const accessToken = cookieStore.get('privy-token')?.value
+    const accessToken = cookieStore.get('privy-token')?.value ?? ''
+    const verifiedClaims = await privy.verifyAuthToken(accessToken)
+    console.log('🛠️ ===== VERIFIED CLAIMS USER EMAIL ===== 🛠️', verifiedClaims?.userId)
+    if (!verifiedClaims) {
+      return new Response('Unauthorized', { status: 401 })
+    }
 
     const body = await req.json()
     if (!body?.messages?.length) {

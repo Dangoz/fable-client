@@ -1,12 +1,12 @@
 import Chat from '@/components/chat/rag/Chat'
 
-// interface ChatPageProps {
-//   params: {
-//     agentId: string
-//   }
-// }
+interface ChatPageProps {
+  params: Promise<{
+    agentId: string
+  }>
+}
 
-const ChatPage = async ({ params }: { params: Promise<{ agentId: string }> }) => {
+const ChatPage = async ({ params }: ChatPageProps) => {
   const { agentId } = await params
 
   return (

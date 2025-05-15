@@ -25,7 +25,7 @@ const Messages = ({ messages, status, userAvatar = '/default-avatar.jpg', classN
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [messages])
+  }, [messages, status])
 
   return (
     <div
@@ -103,48 +103,69 @@ const Messages = ({ messages, status, userAvatar = '/default-avatar.jpg', classN
                         )
                     }
                   })}
-
-                  {/* Show loading dots for the last assistant message when streaming */}
-                  {/* {status === 'streaming' && index === messages.length - 1 && message.role === 'assistant' && (
-                    <div className="flex space-x-2 mt-2">
-                      <motion.div
-                        className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
-                        animate={{ y: [0, -4, 0] }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 1,
-                          ease: 'easeInOut',
-                          times: [0, 0.5, 1],
-                        }}
-                      />
-                      <motion.div
-                        className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
-                        animate={{ y: [0, -4, 0] }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 1,
-                          ease: 'easeInOut',
-                          times: [0, 0.5, 1],
-                          delay: 0.2,
-                        }}
-                      />
-                      <motion.div
-                        className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
-                        animate={{ y: [0, -4, 0] }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 1,
-                          ease: 'easeInOut',
-                          times: [0, 0.5, 1],
-                          delay: 0.4,
-                        }}
-                      />
-                    </div>
-                  )} */}
                 </div>
               </div>
             </div>
           ))}
+
+          {/* Show loading indicator when status is submitted */}
+          {status === 'submitted' && (
+            <div className="flex items-start gap-3 mb-4 self-start animate-fadeIn">
+              {/* AI Avatar */}
+              <div className="flex-shrink-0 mt-1">
+                <div className="w-8 h-8 overflow-hidden rounded-full shadow-sm border border-zinc-200 dark:border-zinc-700">
+                  <Image
+                    src="/default-avatar-green.jpg"
+                    alt="AI Avatar"
+                    width={32}
+                    height={32}
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Loading dots */}
+              <div className="relative group max-w-full">
+                <div className="relative rounded-lg px-4 py-4 break-words bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 shadow-sm">
+                  <div className="flex space-x-2">
+                    <motion.div
+                      className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
+                      animate={{ y: [0, -4, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: 'easeInOut',
+                        times: [0, 0.5, 1],
+                      }}
+                    />
+                    <motion.div
+                      className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
+                      animate={{ y: [0, -4, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: 'easeInOut',
+                        times: [0, 0.5, 1],
+                        delay: 0.2,
+                      }}
+                    />
+                    <motion.div
+                      className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
+                      animate={{ y: [0, -4, 0] }}
+                      transition={{
+                        repeat: Infinity,
+                        duration: 1,
+                        ease: 'easeInOut',
+                        times: [0, 0.5, 1],
+                        delay: 0.4,
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div ref={messagesEndRef} />
         </div>
       )}
