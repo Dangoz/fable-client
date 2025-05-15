@@ -3,16 +3,20 @@
 import React, { useRef, useEffect } from 'react'
 import type { UIMessage } from 'ai'
 import Image from 'next/image'
-import { useUser } from '@clerk/nextjs'
+import { usePrivy } from '@privy-io/react-auth'
+import { truncateWalletAddress } from '@/lib/utils'
+import type { UseChatHelpers } from '@ai-sdk/react'
+import { motion } from 'motion/react'
 
 type MessagesProps = {
   messages: Array<UIMessage>
+  status: UseChatHelpers['status']
   userAvatar?: string
   className?: string
 }
 
-const Messages = ({ messages, userAvatar = '/default-avatar.jpg', className = '' }: MessagesProps) => {
-  const { user } = useUser()
+const Messages = ({ messages, status, userAvatar = '/default-avatar.jpg', className = '' }: MessagesProps) => {
+  const { user } = usePrivy()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -39,12 +43,13 @@ const Messages = ({ messages, userAvatar = '/default-avatar.jpg', className = ''
         <div className="flex flex-col items-center justify-center space-y-4 flex-1">
           <Image src="/chat-banner.svg" alt="Chat Banner" width={300} height={200} className="mb-4" priority />
           <div className="text-zinc-400 dark:text-zinc-500 text-sm">
-            Good to see you{user?.fullName && ` ${user?.fullName}`}, what can I help you with today?
+            Good to see you{user?.wallet?.address && ` ${truncateWalletAddress(user?.wallet?.address)}`}, what can I
+            help you with today?
           </div>
         </div>
       ) : (
         <div className="flex-1 flex flex-col space-y-4">
-          {messages.map((message) => (
+          {messages.map((message, index) => (
             <div
               key={message.id}
               className={`flex items-start gap-3 mb-4 
@@ -98,6 +103,44 @@ const Messages = ({ messages, userAvatar = '/default-avatar.jpg', className = ''
                         )
                     }
                   })}
+
+                  {/* Show loading dots for the last assistant message when streaming */}
+                  {/* {status === 'streaming' && index === messages.length - 1 && message.role === 'assistant' && (
+                    <div className="flex space-x-2 mt-2">
+                      <motion.div
+                        className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 1,
+                          ease: 'easeInOut',
+                          times: [0, 0.5, 1],
+                        }}
+                      />
+                      <motion.div
+                        className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 1,
+                          ease: 'easeInOut',
+                          times: [0, 0.5, 1],
+                          delay: 0.2,
+                        }}
+                      />
+                      <motion.div
+                        className="w-1.5 h-1.5 bg-zinc-400 dark:bg-zinc-500 rounded-full"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 1,
+                          ease: 'easeInOut',
+                          times: [0, 0.5, 1],
+                          delay: 0.4,
+                        }}
+                      />
+                    </div>
+                  )} */}
                 </div>
               </div>
             </div>

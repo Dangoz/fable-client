@@ -11,7 +11,7 @@ const Chat = () => {
   })
   return (
     <div className="flex flex-col w-full h-full items-center relative flex-1">
-      <Messages messages={messages} />
+      <Messages messages={messages} status={status} />
 
       <div className="fixed inset-x-0 bottom-0 z-10">
         <GlossyBorder variant="blue" size="md" borderColor className="mx-auto max-w-2xl rounded-b-none border-b-0 pb-0">

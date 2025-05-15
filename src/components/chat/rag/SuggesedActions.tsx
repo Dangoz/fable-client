@@ -12,24 +12,24 @@ type SuggestedActionsProps = {
 const PureSuggestedActions = ({ append }: SuggestedActionsProps) => {
   const suggestedActions = [
     {
-      title: '解释我的命盘中',
-      label: '紫微星和天同星的影响',
-      action: '解释我的命盘中紫微星和天同星的影响',
+      title: 'Wallet Analysis',
+      label: 'What can I do with my wallet?',
+      action: 'What features are available with my connected wallet?',
     },
     {
-      title: '分析我的命宫',
-      label: '对事业的影响',
-      action: '分析我的命宫对事业的影响',
+      title: 'Get Started',
+      label: 'How to use this platform',
+      action: "I'm new here. How do I get started with this platform?",
     },
     {
-      title: '我的财帛宫',
-      label: '有什么特殊的星曜组合？',
-      action: '我的财帛宫有什么特殊的星曜组合？',
+      title: 'Account Management',
+      label: 'How to update my profile',
+      action: 'How can I update my account settings and profile information?',
     },
     {
-      title: '今年的大运分析',
-      label: '对我的感情有何影响？',
-      action: '今年的大运分析对我的感情有何影响？',
+      title: 'Technical Support',
+      label: 'Help with connection issues',
+      action: "I'm having trouble connecting my wallet. Can you help me troubleshoot?",
     },
   ]
 
