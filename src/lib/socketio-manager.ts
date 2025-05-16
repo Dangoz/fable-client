@@ -4,8 +4,7 @@ import { io, type Socket } from 'socket.io-client'
 import { WorldManager } from './world-manager'
 import { randomUUID } from './utils'
 import { clientLogger } from './logger'
-
-const USER_NAME = 'user'
+import { USER_NAME } from '@/config/constants'
 
 // Define types for the events
 export type MessageBroadcastData = {
