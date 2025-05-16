@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import PrivyProvider from './_providers/privy-provider'
 import Stats from '@/components/common/stats'

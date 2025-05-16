@@ -1,7 +1,13 @@
 'use client'
 
 import { QueryClient, QueryClientProvider as ReactQueryClientProvider } from '@tanstack/react-query'
-import { STALE_TIMES } from '@/hooks/use-query-hooks'
+
+const STALE_TIMES = {
+  FREQUENT: 30 * 1000, // 30 seconds - for data that changes often
+  STANDARD: 2 * 60 * 1000, // 2 minutes - default
+  RARE: 10 * 60 * 1000, // 10 minutes - for rarely changing data
+  NEVER: Number.POSITIVE_INFINITY, // Only refetch on explicit invalidation
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +28,7 @@ const queryClient = new QueryClient({
       // Default to 3 retries for mutations too
       retry: 3,
       retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      networkMode: 'always',
     },
   },
 })

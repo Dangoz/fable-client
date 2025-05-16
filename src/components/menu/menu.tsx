@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import useIsMobile from '@/hooks/useIsMobile'
+import useIsMobile from '@/hooks/use-is-mobile'
 import DesktopMenu from './desktop-menu'
 import MobileMenu from './mobile-menu'
 import { usePathname } from 'next/navigation'

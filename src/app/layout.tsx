@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Cinzel, Atkinson_Hyperlegible } from 'next/font/google'
 import './globals.css'
 import Providers from './providers'
-// import Menu from '@/components/menu/menu'
+import Menu from '@/components/menu/menu'
 import { Toaster } from '@/components/ui/sonner'
 
 const atkinsonHyperlegible = Atkinson_Hyperlegible({
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body className={`${atkinsonHyperlegible.className} ${cinzel.variable} antialiased font-sans`}>
         <Providers>
           {children}
-          {/* <Menu /> */}
+          <Menu />
           <Toaster />
         </Providers>
       </body>
