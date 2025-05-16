@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+'use client'
+
 import { create } from 'zustand'
 import { toast } from 'sonner'
 import SocketIOManager from '@/lib/socketio-manager'
@@ -8,89 +9,94 @@ export type ConnectionStatusType = 'loading' | 'connected' | 'reconnecting' | 'e
 interface ConnectionState {
   status: ConnectionStatusType
   error: string | null
+  isFirstConnect: boolean
 }
 
 interface ConnectionActions {
   setStatus: (status: ConnectionStatusType) => void
   setError: (error: string | null) => void
+  setupListeners: () => () => void
+  cleanupListeners: () => void
 }
 
 type ConnectionStore = ConnectionState & ConnectionActions
 
-export const useConnectionStore = create<ConnectionStore>((set) => ({
-  status: 'loading',
-  error: null,
-  setStatus: (status) => set({ status }),
-  setError: (error) => set({ error }),
-}))
+export const useConnectionStore = create<ConnectionStore>((set, get) => {
+  const socketManager = SocketIOManager.getInstance()
 
-export const useConnectionStatus = () => {
-  const isFirstConnect = useRef(true)
-  const { status, error, setStatus, setError } = useConnectionStore()
+  const onConnect = () => {
+    set({ status: 'connected', error: null })
 
-  useEffect(() => {
-    const socketManager = SocketIOManager.getInstance()
+    if (get().isFirstConnect) {
+      set({ isFirstConnect: false })
+    } else {
+      toast.success('Connection Restored', {
+        description: 'Successfully reconnected to the Eliza server.',
+      })
+    }
+  }
 
-    const onConnect = () => {
-      setStatus('connected')
-      setError(null)
+  const onDisconnect = (reason: string) => {
+    set({ status: 'error', error: `Connection lost: ${reason}` })
+    toast.error('Connection Lost', {
+      description: 'Attempting to reconnect to the Eliza server…',
+    })
+  }
 
-      if (isFirstConnect.current) {
-        isFirstConnect.current = false
-      } else {
-        toast.success('Connection Restored', {
-          description: 'Successfully reconnected to the Eliza server.',
-        })
+  const onReconnectAttempt = () => {
+    set({ status: 'reconnecting', error: 'Reconnecting...' })
+  }
+
+  const onConnectError = (err: Error) => {
+    set({ status: 'error', error: err.message })
+  }
+
+  const onUnauthorized = (reason: string) => {
+    set({ status: 'unauthorized', error: `Unauthorized: ${reason}` })
+    toast.error('Unauthorized', {
+      description: 'Please log in again.',
+    })
+  }
+
+  return {
+    status: 'loading',
+    error: null,
+    isFirstConnect: true,
+    setStatus: (status) => set({ status }),
+    setError: (error) => set({ error }),
+
+    setupListeners: () => {
+      socketManager.on('connect', onConnect)
+      socketManager.on('disconnect', onDisconnect)
+      socketManager.on('reconnect', onConnect)
+      socketManager.on('reconnect_attempt', onReconnectAttempt)
+      socketManager.on('connect_error', onConnectError)
+      socketManager.on('unauthorized', onUnauthorized)
+
+      // trigger initial connect state
+      if (SocketIOManager.isConnected()) {
+        onConnect()
       }
-    }
 
-    const onDisconnect = (reason: string) => {
-      setStatus('error')
-      setError(`Connection lost: ${reason}`)
-      toast.error('Connection Lost', {
-        description: 'Attempting to reconnect to the Eliza server…',
-      })
-    }
+      return get().cleanupListeners
+    },
 
-    const onReconnectAttempt = () => {
-      setStatus('reconnecting')
-      setError('Reconnecting...')
-    }
-
-    const onConnectError = (err: Error) => {
-      setStatus('error')
-      setError(err.message)
-    }
-
-    const onUnauthorized = (reason: string) => {
-      setStatus('unauthorized')
-      setError(`Unauthorized: ${reason}`)
-      toast.error('Unauthorized', {
-        description: 'Please log in again.',
-      })
-    }
-
-    socketManager.on('connect', onConnect)
-    socketManager.on('disconnect', onDisconnect)
-    socketManager.on('reconnect', onConnect)
-    socketManager.on('reconnect_attempt', onReconnectAttempt)
-    socketManager.on('connect_error', onConnectError)
-    socketManager.on('unauthorized', onUnauthorized)
-
-    // trigger initial connect state
-    if (SocketIOManager.isConnected()) {
-      onConnect()
-    }
-
-    return () => {
+    cleanupListeners: () => {
       socketManager.off('connect', onConnect)
       socketManager.off('disconnect', onDisconnect)
       socketManager.off('reconnect', onConnect)
       socketManager.off('reconnect_attempt', onReconnectAttempt)
       socketManager.off('connect_error', onConnectError)
       socketManager.off('unauthorized', onUnauthorized)
-    }
-  }, [toast, setStatus, setError])
+    },
+  }
+})
+
+export const useConnectionStatus = () => {
+  const { status, error, setupListeners } = useConnectionStore()
+
+  // Setup listeners when the hook is first used
+  useConnectionStore.getState().setupListeners()
 
   return { status, error }
 }

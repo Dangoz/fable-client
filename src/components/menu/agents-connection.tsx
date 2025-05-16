@@ -4,7 +4,7 @@ import { useConnectionStatus } from '@/hooks/use-connection-status'
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
-const AgentsConnection = () => {
+const AgentsConnection: React.FC = () => {
   const { status, error } = useConnectionStatus()
 
   const getStatusColor = () => {
