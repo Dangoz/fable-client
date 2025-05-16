@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback } from 'react'
  * @param breakpoint - The width threshold in pixels (default: 768px)
  * @returns boolean indicating if the device is mobile
  */
-export default function useIsMobile(breakpoint = 768): boolean {
+const useIsMobile = (breakpoint = 768): boolean => {
   const [isMobile, setIsMobile] = useState<boolean>(false)
 
   // Helper function to check if the device is mobile
@@ -46,3 +46,5 @@ export default function useIsMobile(breakpoint = 768): boolean {
 
   return isMobile
 }
+
+export default useIsMobile

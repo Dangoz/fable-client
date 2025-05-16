@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
  * @param initialValue The initial value or a function to generate it if not found in Local Storage.
  * @returns A stateful value, and a function to update it.
  */
-function useLocalStorage<T>(key: string, initialValue: T | (() => T)): [T, (value: T | ((val: T) => T)) => void] {
+const useLocalStorage = <T>(key: string, initialValue: T | (() => T)): [T, (value: T | ((val: T) => T)) => void] => {
   // Get initial value from local storage or use the provided initial value
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === 'undefined') {

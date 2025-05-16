@@ -1,21 +1,11 @@
-'use client'
-
-import { useEffect } from 'react'
-import Chat from '@/components/chat/rag/Chat'
-// import clientLogger from '@/lib/logger'
+import Chat from '@/components/chat/rag/chat'
 
 interface ChatPageProps {
-  params: {
-    agentId: string
-  }
+  params: Promise<{ agentId: string }>
 }
 
-const ChatPage = ({ params }: ChatPageProps) => {
-  const { agentId } = params
-
-  useEffect(() => {
-    // clientLogger.info('Chat page loaded', { agentId, timestamp: new Date().toISOString() })
-  }, [agentId])
+const ChatPage = async ({ params }: ChatPageProps) => {
+  const { agentId } = await params
 
   return (
     <div className="w-full h-full min-h-screen pt-20 px-4">

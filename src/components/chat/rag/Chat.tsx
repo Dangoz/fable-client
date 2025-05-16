@@ -1,8 +1,8 @@
 'use client'
 
 import { useChat } from '@ai-sdk/react'
-import { ChatInput } from './ChatInput'
-import Messages from './Messages'
+import { ChatInput } from './chat-input'
+import Messages from './messages'
 import { GlossyBorder } from '@/components/ui/glossy-border'
 
 const Chat = () => {
