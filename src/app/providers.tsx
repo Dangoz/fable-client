@@ -3,7 +3,7 @@
 import React from 'react'
 import PrivyProvider from './_providers/privy-provider'
 import Stats from '@/components/common/stats'
-import QueryClientProvider from './_providers/queryClientProvider'
+import QueryClientProvider from './_providers/query-client-provider'
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
