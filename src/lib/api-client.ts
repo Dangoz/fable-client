@@ -1,34 +1,10 @@
 import type { ChatMessage } from '@/types/chat-message'
 import { assert } from '@/lib/assert'
+import type { BackendMemory } from '@/types/memory'
 
 const API_PREFIX = (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') + '/api' // Assuming backend is proxied or on same origin
 
 console.log('API_PREFIX', API_PREFIX)
-
-// Simplified representation of backend Memory type for parsing
-interface BackendMemory {
-  id: string
-  entityId: string // UUID of sender (user or agent)
-  agentId: string // UUID of the agent this memory belongs to
-  roomId: string // UUID of the room (which is also agentId in this case)
-  content: {
-    text?: string
-    source?: string
-    thought?: string
-    actions?: string[]
-    // other potential fields from backend Content
-    [key: string]: unknown
-  }
-  metadata?: {
-    entityName?: string
-    // other potential metadata
-    [key: string]: unknown
-  }
-  createdAt: number
-  worldId?: string
-  // other potential fields from backend Memory
-  [key: string]: unknown
-}
 
 /**
  * Basic fetch wrapper
