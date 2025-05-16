@@ -1,7 +1,7 @@
 import { elizaLogger } from '@elizaos/core'
 
 // Add client-specific context to logs
-const clientLogger = {
+export const clientLogger = {
   info: (msg: string, ...args: any[]) => {
     elizaLogger.info({ source: 'client' }, msg, ...args)
   },
@@ -15,5 +15,3 @@ const clientLogger = {
     elizaLogger.debug({ source: 'client' }, msg, ...args)
   },
 }
-
-export default clientLogger

@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import type { UUID } from '@elizaos/core'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -26,4 +27,9 @@ export function truncateWalletAddress(address: string, startChars: number = 3, e
   const end = address.slice(-endChars)
 
   return `${start}...${end}`
+}
+
+// Generate a random UUID
+export function randomUUID(): UUID {
+  return URL.createObjectURL(new Blob()).split('/').pop() as UUID
 }
