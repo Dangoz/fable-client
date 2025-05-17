@@ -429,7 +429,7 @@ export function useGroupMessages(
     queryFn: async () => {
       const result = await apiClient.getGroupMemories(serverId)
       const validSuffixes = [`:${USER_NAME}`, ':agent']
-      let memories = result.data
+      const memories = result.data
         .map((memory: Memory): ContentWithUser | null => {
           const source = memory.content?.source ?? ''
           if (!source.startsWith(groupChatSource) || !validSuffixes.some((suffix) => source.endsWith(suffix))) {

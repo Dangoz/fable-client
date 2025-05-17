@@ -1,4 +1,6 @@
-import UserConnection from './user-connection'
+'use client'
+
+// import UserConnection from './user-connection'
 import Logo from './logo'
 import AgentsConnection from './agents-connection'
 
