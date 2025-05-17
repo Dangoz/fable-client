@@ -6,6 +6,7 @@ import { WorldManager } from './world-manager'
 import { clientLogger } from './logger'
 import type { AgentPanel } from '@/hooks/use-query-hooks'
 
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 const API_PREFIX = '/api'
 
 // Key for storing the API key in localStorage, now a function
@@ -33,7 +34,7 @@ const fetcher = async ({
 }) => {
   // Ensure URL starts with a slash if it's a relative path
   const normalizedUrl = API_PREFIX + (url.startsWith('/') ? url : `/${url}`)
-
+  const fullUrl = SERVER_URL + normalizedUrl
   clientLogger.info('API Request:', method || 'GET', normalizedUrl)
 
   // --- BEGIN Add API Key Header ---
@@ -73,7 +74,7 @@ const fetcher = async ({
   }
 
   try {
-    const response = await fetch(normalizedUrl, options)
+    const response = await fetch(fullUrl, options)
     const contentType = response.headers.get('Content-Type')
 
     if (contentType?.startsWith('audio/')) {
