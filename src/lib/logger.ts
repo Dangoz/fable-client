@@ -1,17 +1,23 @@
-import { elizaLogger } from '@elizaos/core'
+const isDevelopment = process.env.NODE_ENV !== 'production'
 
-// Add client-specific context to logs
 export const clientLogger = {
   info: (msg: string, ...args: any[]) => {
-    elizaLogger.info({ source: 'client' }, msg, ...args)
+    if (isDevelopment) {
+      console.info(`[CLIENT] ${msg}`, ...args)
+    }
   },
+
   error: (msg: string, ...args: any[]) => {
-    elizaLogger.error({ source: 'client' }, msg, ...args)
+    console.error(`[CLIENT] ${msg}`, ...args)
   },
+
   warn: (msg: string, ...args: any[]) => {
-    elizaLogger.warn({ source: 'client' }, msg, ...args)
+    console.warn(`[CLIENT] ${msg}`, ...args)
   },
+
   debug: (msg: string, ...args: any[]) => {
-    elizaLogger.debug({ source: 'client' }, msg, ...args)
+    if (isDevelopment) {
+      console.debug(`[CLIENT] ${msg}`, ...args)
+    }
   },
 }
