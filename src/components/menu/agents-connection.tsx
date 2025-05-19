@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useConnection } from '@/context/ConnectionContext'
+import { useConnection } from '@/context/connection-context'
 
 const AgentsConnection: React.FC = () => {
   const { status, error } = useConnection()

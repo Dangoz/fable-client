@@ -2,48 +2,55 @@
 
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/menu/user-avatar'
-import { Skeleton } from '@/components/ui/skeleton'
+// import { Skeleton } from '@/components/ui/skeleton'
 import { LogIn } from 'lucide-react'
 import { useAccount, useWalletClient } from 'wagmi'
 import { useModal } from 'connectkit'
-import { client } from '@/lib/lens/client'
-import { signMessageWith } from '@lens-protocol/client/viem'
+import { signMessageWith } from '@lens-protocol/react/viem'
 import { LENS_APP_ID } from '@/config/lens'
-import { useLensSession } from '@/context/lensSessionContext'
+import { useAuthenticatedUser, useLogin, evmAddress } from '@lens-protocol/react'
+import LensLogoSVG from '@/components/common/lens-logo-svg'
 
 const UserConnection = () => {
-  const { address, isConnected, isConnecting } = useAccount()
+  const { address, isConnected } = useAccount()
   const { setOpen } = useModal()
   const { data: walletClient } = useWalletClient()
-  const { sessionClient, setSessionClient } = useLensSession()
+  const { data: authenticatedUser } = useAuthenticatedUser()
+  const { execute } = useLogin()
 
   const handleConnect = async () => {
     setOpen(true)
   }
 
   const handleSignIn = async () => {
-    if (!walletClient) return
+    if (!walletClient) {
+      return
+    }
+    const address = walletClient.account.address
 
-    const authenticated = await client.login({
+    const result = await execute({
       onboardingUser: {
-        app: LENS_APP_ID,
-        wallet: address,
+        wallet: evmAddress(address),
+        app: evmAddress(LENS_APP_ID),
       },
+      // accountOwner: {
+      //   account: evmAddress(address),
+      //   app: evmAddress(LENS_APP_ID),
+      //   owner: evmAddress(address),
+      // },
       signMessage: signMessageWith(walletClient),
     })
 
-    if (authenticated.isErr()) {
-      return console.error(authenticated.error)
+    if (result.isErr()) {
+      console.error(result.error)
     }
-
-    setSessionClient(authenticated.value)
   }
 
-  if (isConnecting) {
-    return <Skeleton className="h-9 w-[85px] border rounded-lg" />
-  }
+  // if (isConnecting) {
+  //   return <Skeleton className="h-9 w-[85px] border rounded-lg" />
+  // }
 
-  if (!isConnected) {
+  if (!isConnected || !address) {
     return (
       <div>
         <Button variant={'gradient'} onClick={handleConnect}>
@@ -54,12 +61,12 @@ const UserConnection = () => {
     )
   }
 
-  if (!sessionClient) {
+  if (!authenticatedUser) {
     return (
       <div>
         <Button variant={'gradient'} onClick={handleSignIn}>
-          <LogIn className="mr-2 h-4 w-4" />
-          Sign in
+          <LensLogoSVG className="h-6 w-6" />
+          Sign in with Lens
         </Button>
       </div>
     )

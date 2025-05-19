@@ -7,11 +7,28 @@ import { LogOut } from 'lucide-react'
 import { disconnect, http } from '@wagmi/core'
 import { Button } from '@/components/ui/button'
 import { LENS_CHAIN, LENS_CHAIN_RPC } from '@/config/lens'
+import { useAuthenticatedUser, useLogout } from '@lens-protocol/react'
 
 const UserAvatar = () => {
   const { address } = useAccount()
+  const { data: authenticatedUser } = useAuthenticatedUser()
+  const { execute } = useLogout()
 
-  if (!address) return null
+  if (!address || !authenticatedUser) return null
+
+  const handleLogout = async () => {
+    // sign out from lens
+    await execute()
+    // disconnect from wagmi
+    await disconnect(
+      createConfig({
+        chains: [LENS_CHAIN],
+        transports: {
+          [LENS_CHAIN.id]: http(LENS_CHAIN_RPC),
+        },
+      }),
+    )
+  }
 
   return (
     <>
@@ -24,23 +41,14 @@ const UserAvatar = () => {
                 <Skeleton className="size-5" />
               </AvatarFallback>
             </Avatar>
-            <span className="text-xs font-medium">{truncateWalletAddress(address)}</span>
+            <span className="text-xs font-medium">
+              <div>{authenticatedUser.address || truncateWalletAddress(address)}</div>
+            </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>{truncateWalletAddress(address)}</DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              disconnect(
-                createConfig({
-                  chains: [LENS_CHAIN],
-                  transports: {
-                    [LENS_CHAIN.id]: http(LENS_CHAIN_RPC),
-                  },
-                }),
-              )
-            }}
-          >
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-1 h-4 w-4" />
             Logout
           </DropdownMenuItem>
