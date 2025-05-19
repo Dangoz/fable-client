@@ -35,8 +35,8 @@ const UserAvatar = () => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="gradient" className="flex items-center gap-2 h-9 px-3">
-            <Avatar className="h-7 w-7">
+          <Button variant="gradient" className="flex items-center gap-2 h-9 pl-2 pr-3">
+            <Avatar className="h-7 w-7 border border-primary/20 dark:border-primary/30">
               <AvatarImage src={account?.metadata?.picture || '/default-avatar.jpg'} />
               <AvatarFallback>
                 <Skeleton className="size-7" />
