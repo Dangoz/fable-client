@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { truncateWalletAddress } from '@/lib/utils'
 import { Copy, Check } from 'lucide-react'
-import { useAccount } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 
 const Stats = () => {
-  const { address, isConnected, chain } = useAccount()
+  const { address, isConnected } = useAccount()
+  const chainId = useChainId()
   const [copiedItemId, setCopiedItemId] = useState<string | null>(null)
 
   const copyToClipboard = (text: string, itemId: string) => {
@@ -53,7 +54,7 @@ const Stats = () => {
           'No wallet'
         )}
       </div>
-      <div>Chain: {chain?.name}</div>
+      <div>Chain: {chainId}</div>
     </div>
   )
 }

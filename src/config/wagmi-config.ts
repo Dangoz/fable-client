@@ -11,6 +11,5 @@ export const wagmiConfig = createConfig(
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
     appName: 'Fable',
     appDescription: 'Fablexyz, Fantasy Predicetion Market, Decentralized Storytelling',
-    appIcon: 'https://fable.xyz/icon.png',
   }),
 )
