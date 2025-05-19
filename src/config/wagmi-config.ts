@@ -1,6 +1,6 @@
 import { http, createConfig } from 'wagmi'
-import { getDefaultConfig } from 'connectkit'
 import { LENS_CHAIN, LENS_CHAIN_RPC } from './lens'
+import { getDefaultConfig } from 'connectkit'
 
 export const wagmiConfig = createConfig(
   getDefaultConfig({

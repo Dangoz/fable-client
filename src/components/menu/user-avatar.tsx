@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { LogOut } from 'lucide-react'
 import { disconnect } from '@wagmi/core'
 import { wagmiConfig } from '@/config/wagmi-config'
+import { Button } from '@/components/ui/button'
 
 const UserAvatar = () => {
   const { address } = useAccount()
@@ -15,14 +16,16 @@ const UserAvatar = () => {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-2 px-2 h-7 rounded-lg border border-primary/20 dark:border-primary/30 hover:border-primary/40 dark:hover:border-primary/50 transition-all duration-200">
-          <Avatar className="border border-primary/20 dark:border-primary/30 h-5 w-5">
-            <AvatarImage src={'/default-avatar.jpg'} />
-            <AvatarFallback>
-              <Skeleton className="size-5" />
-            </AvatarFallback>
-          </Avatar>
-          <span className="text-xs font-medium text-foreground/80">{truncateWalletAddress(address)}</span>
+        <DropdownMenuTrigger asChild>
+          <Button variant="gradient" size="sm" className="h-7">
+            <Avatar className="h-5 w-5 mr-1">
+              <AvatarImage src={'/default-avatar.jpg'} />
+              <AvatarFallback>
+                <Skeleton className="size-5" />
+              </AvatarFallback>
+            </Avatar>
+            <span className="text-xs font-medium">{truncateWalletAddress(address)}</span>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>{truncateWalletAddress(address)}</DropdownMenuItem>
