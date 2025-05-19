@@ -1,12 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useAccount } from 'wagmi'
+import { useAccount, createConfig } from 'wagmi'
 import { truncateWalletAddress } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { LogOut } from 'lucide-react'
-import { disconnect } from '@wagmi/core'
-import { wagmiConfig } from '@/config/wagmi-config'
+import { disconnect, http } from '@wagmi/core'
 import { Button } from '@/components/ui/button'
+import { LENS_CHAIN, LENS_CHAIN_RPC } from '@/config/lens'
 
 const UserAvatar = () => {
   const { address } = useAccount()
@@ -29,7 +29,18 @@ const UserAvatar = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>{truncateWalletAddress(address)}</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => disconnect(wagmiConfig)}>
+          <DropdownMenuItem
+            onClick={() => {
+              disconnect(
+                createConfig({
+                  chains: [LENS_CHAIN],
+                  transports: {
+                    [LENS_CHAIN.id]: http(LENS_CHAIN_RPC),
+                  },
+                }),
+              )
+            }}
+          >
             <LogOut className="mr-1 h-4 w-4" />
             Logout
           </DropdownMenuItem>

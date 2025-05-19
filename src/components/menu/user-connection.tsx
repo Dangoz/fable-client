@@ -4,32 +4,28 @@ import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/menu/user-avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LogIn } from 'lucide-react'
-import { ConnectKitButton } from 'connectkit'
 import { useAccount } from 'wagmi'
-// import { signMessageWith } from '@lens-protocol/client/viem'
+import { useModal } from 'connectkit'
 
 const UserConnection = () => {
-  const { isConnecting, isDisconnected } = useAccount()
+  const { address, isConnecting, isDisconnected, isReconnecting } = useAccount()
+  const { setOpen } = useModal()
 
-  if (isConnecting) {
+  const handleConnect = async () => {
+    setOpen(true)
+  }
+
+  if (isConnecting || isReconnecting) {
     return <Skeleton className="h-9 w-[85px] border rounded-lg" />
   }
 
-  const handleSignIn = async (show: () => void) => {
-    show()
-  }
-
-  if (isDisconnected) {
+  if (!address || isDisconnected) {
     return (
       <div>
-        <ConnectKitButton.Custom>
-          {({ show }) => (
-            <Button variant={'gradient'} onClick={(show) => handleSignIn(show)}>
-              <LogIn className="mr-2 h-4 w-4" />
-              Sign in
-            </Button>
-          )}
-        </ConnectKitButton.Custom>
+        <Button variant={'gradient'} onClick={handleConnect}>
+          <LogIn className="mr-2 h-4 w-4" />
+          Sign in
+        </Button>
       </div>
     )
   }
