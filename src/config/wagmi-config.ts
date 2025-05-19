@@ -1,12 +1,12 @@
 import { http, createConfig } from 'wagmi'
 import { getDefaultConfig } from 'connectkit'
-import { LENS_CHAIN } from './lens'
+import { LENS_CHAIN, LENS_CHAIN_RPC } from './lens'
 
 export const wagmiConfig = createConfig(
   getDefaultConfig({
     chains: [LENS_CHAIN],
     transports: {
-      [LENS_CHAIN.id]: http(LENS_CHAIN.rpcUrls.default.http[0]!),
+      [LENS_CHAIN.id]: http(LENS_CHAIN_RPC),
     },
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
     appName: 'Fable',

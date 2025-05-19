@@ -1,14 +1,9 @@
 // import { openai } from '@ai-sdk/openai'
 import { groq } from '@ai-sdk/groq'
 import { streamText, tool } from 'ai'
-import { cookies } from 'next/headers'
 import { z } from 'zod'
 import { constructCharacterSystem } from '@/lib/ai/character-system'
 export const maxDuration = 30
-// import { PrivyClient } from '@privy-io/server-auth'
-
-// Initialize Privy client with app ID and secret from environment variables
-// const privy = new PrivyClient(process.env.PRIVY_APP_ID as string, process.env.PRIVY_APP_SECRET as string)
 
 export async function POST(req: Request) {
   try {
@@ -40,6 +35,7 @@ export async function POST(req: Request) {
           execute: async ({ content }) => {
             console.log('🛠️ ===== INITIALIZING ADD RESOURCE TOOL ===== 🛠️')
             // await createResource({ content })
+            console.log(`Content: ${content}`)
             return 'Resource added to knowledge base'
           },
         }),
@@ -50,6 +46,7 @@ export async function POST(req: Request) {
           }),
           execute: async ({ question }) => {
             console.log('🛠️ ===== INITIALIZING GET INFORMATION TOOL ===== 🛠️')
+            console.log(`Question: ${question}`)
             // const relevantContent = await findRelevantContent(question)
             return 'Information retrieved from knowledge base'
           },
