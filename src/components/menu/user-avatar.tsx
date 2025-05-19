@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation'
 const UserAvatar = () => {
   const { data: authenticatedUser } = useAuthenticatedUser()
   const { data: account } = useAccount({
-    address: evmAddress(authenticatedUser?.address as string),
+    address: authenticatedUser ? evmAddress(authenticatedUser.address as string) : '',
   })
   const { execute } = useLogout()
   const router = useRouter()

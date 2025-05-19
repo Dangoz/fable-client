@@ -3,7 +3,6 @@ import { AccountFragment, AccountMetadataFragment } from './accounts'
 import { PostMetadataFragment } from './posts'
 import { CustomMediaImageFragment } from './images'
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 declare module '@lens-protocol/client' {
   export interface Account extends FragmentOf<typeof AccountFragment> {}

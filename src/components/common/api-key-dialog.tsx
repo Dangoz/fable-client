@@ -48,6 +48,7 @@ export function ApiKeyDialog({ open, onOpenChange, onApiKeySaved }: ApiKeyDialog
     try {
       localStorage.setItem(storageKey, apiKey)
     } catch (err) {
+      console.error('Unable to save the API key (browser storage blocked).', err)
       toast.error('Storage Error', {
         description: 'Unable to save the API key (browser storage blocked).',
       })

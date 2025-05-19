@@ -13,7 +13,7 @@ export default function ProfilePage() {
 
   // Get account data for the authenticated user
   const { data: account, loading: accountLoading } = useAccount({
-    address: authenticatedUser ? evmAddress(authenticatedUser.address as string) : undefined,
+    address: authenticatedUser ? evmAddress(authenticatedUser.address as string) : '',
   })
 
   // Redirect to home if not authenticated
