@@ -1,31 +1,30 @@
-import { usePrivy, useConnectOrCreateWallet } from '@privy-io/react-auth'
+'use client'
+
 import { Button } from '@/components/ui/button'
 import UserAvatar from '@/components/menu/user-avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { LogIn } from 'lucide-react'
+import { ConnectKitButton } from 'connectkit'
+import { useAccount } from 'wagmi'
 
 const UserConnection = () => {
-  const { ready, authenticated } = usePrivy()
-  const { connectOrCreateWallet } = useConnectOrCreateWallet({
-    onSuccess: ({ wallet }) => {
-      console.log(wallet)
-    },
-    onError: (error) => {
-      console.log(error)
-    },
-  })
+  const { isConnecting, isConnected } = useAccount()
 
-  if (!ready) {
-    return <Skeleton className="h-7 w-10 border rounded-lg" />
+  if (isConnecting) {
+    return <Skeleton className="h-9 w-[85px] border rounded-lg" />
   }
 
-  if (!authenticated) {
+  if (!isConnected) {
     return (
       <div>
-        <Button variant={'gradient'} onClick={() => connectOrCreateWallet()}>
-          <LogIn className="mr-2 h-4 w-4" />
-          Log in
-        </Button>
+        <ConnectKitButton.Custom>
+          {({ show }) => (
+            <Button variant={'gradient'} onClick={show}>
+              <LogIn className="mr-2 h-4 w-4" />
+              Log in
+            </Button>
+          )}
+        </ConnectKitButton.Custom>
       </div>
     )
   }

@@ -1,8 +1,8 @@
 'use client'
 
-// import UserConnection from './user-connection'
+import UserConnection from './user-connection'
 import Logo from './logo'
-import AgentsConnection from './agents-connection'
+// import AgentsConnection from './agents-connection'
 
 const DesktopMenu = () => {
   return (
@@ -11,8 +11,8 @@ const DesktopMenu = () => {
         <Logo />
       </div>
       <div className="flex items-center space-x-4">
-        {/* <UserConnection /> */}
-        <AgentsConnection />
+        <UserConnection />
+        {/* <AgentsConnection /> */}
       </div>
     </div>
   )
