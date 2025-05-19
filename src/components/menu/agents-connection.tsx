@@ -27,7 +27,7 @@ const AgentsConnection: React.FC = () => {
       case 'connected':
         return 'Online'
       case 'loading':
-        return 'Connecting'
+        return 'Connecting...'
       case 'error':
       case 'unauthorized':
         return 'Offline'

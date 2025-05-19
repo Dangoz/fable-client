@@ -1,20 +1,21 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useAccount, createConfig } from 'wagmi'
-import { truncateWalletAddress } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { LogOut } from 'lucide-react'
 import { disconnect, http } from '@wagmi/core'
 import { Button } from '@/components/ui/button'
 import { LENS_CHAIN, LENS_CHAIN_RPC } from '@/config/lens'
-import { useAuthenticatedUser, useLogout } from '@lens-protocol/react'
+import { useLogout, useAuthenticatedUser, useAccount, evmAddress } from '@lens-protocol/react'
+import { createConfig } from 'wagmi'
 
 const UserAvatar = () => {
-  const { address } = useAccount()
   const { data: authenticatedUser } = useAuthenticatedUser()
+  const { data: account } = useAccount({
+    address: evmAddress(authenticatedUser?.address as string),
+  })
   const { execute } = useLogout()
-
-  if (!address || !authenticatedUser) return null
 
   const handleLogout = async () => {
     // sign out from lens
@@ -36,18 +37,17 @@ const UserAvatar = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="gradient" size="sm" className="h-7">
             <Avatar className="h-5 w-5 mr-1">
-              <AvatarImage src={'/default-avatar.jpg'} />
+              <AvatarImage src={account?.metadata?.picture || '/default-avatar.jpg'} />
               <AvatarFallback>
                 <Skeleton className="size-5" />
               </AvatarFallback>
             </Avatar>
-            <span className="text-xs font-medium">
-              <div>{authenticatedUser.address || truncateWalletAddress(address)}</div>
-            </span>
+            <span className="text-xs font-medium">{account?.username?.value}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>{truncateWalletAddress(address)}</DropdownMenuItem>
+          <DropdownMenuItem>{account?.username?.value}</DropdownMenuItem>
+
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-1 h-4 w-4" />
             Logout

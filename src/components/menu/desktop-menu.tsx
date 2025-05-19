@@ -11,8 +11,8 @@ const DesktopMenu = () => {
         <Logo />
       </div>
       <div className="flex items-center space-x-4">
-        <UserConnection />
         {/* <AgentsConnection /> */}
+        <UserConnection />
       </div>
     </div>
   )

@@ -8,7 +8,7 @@ import { useAccount, useWalletClient } from 'wagmi'
 import { useModal } from 'connectkit'
 import { signMessageWith } from '@lens-protocol/react/viem'
 import { LENS_APP_ID } from '@/config/lens'
-import { useAuthenticatedUser, useLogin, evmAddress } from '@lens-protocol/react'
+import { useAuthenticatedUser, useLogin, evmAddress, useAccountsAvailable } from '@lens-protocol/react'
 import LensLogoSVG from '@/components/common/lens-logo-svg'
 
 const UserConnection = () => {
@@ -17,6 +17,10 @@ const UserConnection = () => {
   const { data: walletClient } = useWalletClient()
   const { data: authenticatedUser } = useAuthenticatedUser()
   const { execute } = useLogin()
+  const { data: accountsAvailable } = useAccountsAvailable({
+    managedBy: address,
+    suspense: true,
+  })
 
   const handleConnect = async () => {
     setOpen(true)
@@ -26,18 +30,31 @@ const UserConnection = () => {
     if (!walletClient) {
       return
     }
-    const address = walletClient.account.address
 
+    // new user without accounts, use onboardingUser
+    if (!accountsAvailable) {
+      const result = await execute({
+        onboardingUser: {
+          wallet: evmAddress(address as string),
+          app: evmAddress(LENS_APP_ID),
+        },
+        signMessage: signMessageWith(walletClient),
+      })
+
+      if (result.isErr()) {
+        console.error(result.error)
+      }
+
+      return
+    }
+
+    // existing user with accounts
     const result = await execute({
-      onboardingUser: {
-        wallet: evmAddress(address),
+      accountOwner: {
+        account: evmAddress(accountsAvailable?.items[1]?.account.address as string),
         app: evmAddress(LENS_APP_ID),
+        owner: evmAddress(address as string),
       },
-      // accountOwner: {
-      //   account: evmAddress(address),
-      //   app: evmAddress(LENS_APP_ID),
-      //   owner: evmAddress(address),
-      // },
       signMessage: signMessageWith(walletClient),
     })
 
