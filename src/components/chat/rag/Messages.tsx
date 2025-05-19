@@ -3,10 +3,10 @@
 import React, { useRef, useEffect } from 'react'
 import type { UIMessage } from 'ai'
 import Image from 'next/image'
-import { usePrivy } from '@privy-io/react-auth'
 import { truncateWalletAddress } from '@/lib/utils'
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { motion } from 'motion/react'
+import { useAccount } from 'wagmi'
 
 type MessagesProps = {
   messages: Array<UIMessage>
@@ -16,7 +16,7 @@ type MessagesProps = {
 }
 
 const Messages = ({ messages, status, userAvatar = '/default-avatar.jpg', className = '' }: MessagesProps) => {
-  const { user } = usePrivy()
+  const { address } = useAccount()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -43,15 +43,14 @@ const Messages = ({ messages, status, userAvatar = '/default-avatar.jpg', classN
         <div className="flex flex-col items-center justify-center space-y-4 flex-1">
           <Image src="/chat-banner.svg" alt="Chat Banner" width={300} height={200} className="mb-4" priority />
           <div className="text-zinc-400 dark:text-zinc-500 text-sm">
-            Good to see you{user?.wallet?.address && ` ${truncateWalletAddress(user?.wallet?.address)}`}, what can I
-            help you with today?
+            Good to see you{address && ` ${truncateWalletAddress(address)}`}, what can I help you with today?
           </div>
         </div>
       ) : (
         <div className="flex-1 flex flex-col space-y-4">
           {messages.map((message, index) => (
             <div
-              key={message.id}
+              key={index}
               className={`flex items-start gap-3 mb-4 
                         ${message.role === 'user' ? 'flex-row-reverse self-end' : 'self-start'} 
                         animate-fadeIn max-w-[90%] w-auto`}

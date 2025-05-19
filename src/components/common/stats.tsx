@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { usePrivy } from '@privy-io/react-auth'
 import { truncateWalletAddress } from '@/lib/utils'
 import { Copy, Check } from 'lucide-react'
+import { useAccount } from 'wagmi'
 
 const Stats = () => {
-  const { authenticated, user } = usePrivy()
+  const { address, isConnected, chain } = useAccount()
   const [copiedItemId, setCopiedItemId] = useState<string | null>(null)
 
   const copyToClipboard = (text: string, itemId: string) => {
@@ -18,15 +18,15 @@ const Stats = () => {
   return (
     <div className="fixed bottom-20 left-5 z-[9999] flex flex-col items-start rounded-md p-2 border-2">
       <h1>Stats</h1>
-      <div>Authentication: {`${authenticated}`}</div>
+      <div>Authentication: {`${isConnected}`}</div>
       <div>------------------</div>
       <div className="flex items-center gap-1">
         User ID:{' '}
-        {user?.id ? (
+        {address ? (
           <span className="flex items-center gap-1">
-            <span>{user.id}</span>
+            <span>{truncateWalletAddress(address)}</span>
             <button
-              onClick={() => copyToClipboard(user.id, 'userId')}
+              onClick={() => copyToClipboard(address, 'userId')}
               className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
               {copiedItemId === 'userId' ? <Check size={14} /> : <Copy size={14} />}
@@ -38,11 +38,11 @@ const Stats = () => {
       </div>
       <div className="flex items-center gap-1">
         Wallet Address:{' '}
-        {user?.wallet?.address ? (
+        {address ? (
           <span className="flex items-center gap-1">
-            <span>{truncateWalletAddress(user.wallet.address)}</span>
+            <span>{truncateWalletAddress(address)}</span>
             <button
-              onClick={() => copyToClipboard(user?.wallet?.address || '', 'walletAddress')}
+              onClick={() => copyToClipboard(address, 'walletAddress')}
               className="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               title="Copy full address"
             >
@@ -53,7 +53,7 @@ const Stats = () => {
           'No wallet'
         )}
       </div>
-      <div>Wallet Type: {user?.wallet?.walletClientType || 'N/A'}</div>
+      <div>Chain: {chain?.name}</div>
     </div>
   )
 }

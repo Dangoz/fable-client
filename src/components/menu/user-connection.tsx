@@ -8,13 +8,13 @@ import { ConnectKitButton } from 'connectkit'
 import { useAccount } from 'wagmi'
 
 const UserConnection = () => {
-  const { isConnecting, isConnected } = useAccount()
+  const { isConnecting, isDisconnected } = useAccount()
 
   if (isConnecting) {
     return <Skeleton className="h-9 w-[85px] border rounded-lg" />
   }
 
-  if (!isConnected) {
+  if (isDisconnected) {
     return (
       <div>
         <ConnectKitButton.Custom>
