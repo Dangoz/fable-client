@@ -1,1 +1,1 @@
-export const screensWithMenu = ['/', '/settings', '/world', '/hub'] as const
+export const screensWithMenu = ['/', '/settings', '/world', '/hub', '/chat', '/profile'] as const
