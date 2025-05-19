@@ -1,0 +1,2 @@
+export const LENS_TESTNET_APP_ADDRESS = process.env.NEXT_PUBLIC_LENS_TESTNET_APP_ADDRESS as string
+export const LENS_MAINNET_APP_ADDRESS = process.env.NEXT_PUBLIC_LENS_MAINNET_APP_ADDRESS as string
