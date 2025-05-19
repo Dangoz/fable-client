@@ -56,20 +56,20 @@ export default function ProfilePage() {
     (attr) => attr.key.toLowerCase() === 'website' || attr.key.toLowerCase() === 'url',
   )
   const website = websiteAttribute?.value
-
   return (
     <div className="w-full flex justify-center pt-20">
       <div className="w-full max-w-md px-4">
         <div className="rounded-lg border border-primary/10 backdrop-blur-sm bg-background/80 shadow-md overflow-hidden">
           {/* Header with background */}
-          <div className="h-24 bg-gradient-to-r from-primary/20 to-primary/10 relative">
+          <div className="h-24 relative bg-gradient-to-r from-primary/20 to-primary/10 bg-cover bg-center">
+            <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]"></div>
             {/* Avatar - positioned to overlap header and content */}
-            <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+            <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 z-10">
               <Avatar className="h-24 w-24 border-4 border-background shadow-md">
                 <AvatarImage
                   src={account.metadata?.picture || '/default-avatar.jpg'}
                   alt={account.username?.value || 'User'}
-                  className="object-cover"
+                  className="object-cover object-position-center"
                 />
                 <AvatarFallback className="bg-primary/10">
                   <User className="h-12 w-12 text-primary/40" />
