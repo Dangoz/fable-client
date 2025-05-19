@@ -35,14 +35,14 @@ const UserAvatar = () => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="gradient" size="sm" className="h-7">
-            <Avatar className="h-5 w-5 mr-1">
+          <Button variant="gradient" className="flex items-center gap-2 h-9 px-3">
+            <Avatar className="h-7 w-7">
               <AvatarImage src={account?.metadata?.picture || '/default-avatar.jpg'} />
               <AvatarFallback>
-                <Skeleton className="size-5" />
+                <Skeleton className="size-7" />
               </AvatarFallback>
             </Avatar>
-            <span className="text-xs font-medium">{account?.username?.value}</span>
+            <span className="text-sm font-medium">{account?.username?.value}</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

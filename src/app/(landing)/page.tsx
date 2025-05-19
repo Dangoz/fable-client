@@ -1,3 +1,9 @@
+import AmbientParticles from '@/components/rtf/ambient-particles'
+
 export default function Home() {
-  return <div className="w-full h-full min-h-screen">{/* <AmbientParticles /> */}</div>
+  return (
+    <div className="w-full h-full min-h-screen">
+      <AmbientParticles />
+    </div>
+  )
 }
