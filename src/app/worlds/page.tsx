@@ -8,6 +8,8 @@ import { PlusIcon } from 'lucide-react'
 import { FableWorld } from '@/types/world'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { SolarPunkWorld } from '@/config/world'
+import { apiClient } from '@/lib/api-client'
+import { Skeleton } from '@/components/ui/skeleton'
 
 // Mock data based on our display needs
 const mockWorlds: FableWorld[] = [
@@ -150,14 +152,77 @@ const WorldPlusCard = () => {
   )
 }
 
+// Skeleton loader for world cards
+const WorldCardSkeleton = () => {
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-xl aspect-[3/4] transition-all',
+        'shadow-lg border border-border/30 flex flex-col justify-end',
+        'bg-gradient-to-br from-secondary/20 to-primary/10',
+      )}
+    >
+      {/* Content skeleton */}
+      <div className="relative z-10 p-5">
+        <Skeleton className="h-6 w-3/4 mb-2" />
+
+        {/* Tags skeleton */}
+        <div className="flex flex-wrap gap-2 mb-3">
+          <Skeleton className="h-4 w-16 rounded-full" />
+          <Skeleton className="h-4 w-20 rounded-full" />
+          <Skeleton className="h-4 w-14 rounded-full" />
+        </div>
+
+        <div className="flex justify-between items-center">
+          {/* Agent avatars skeleton */}
+          <div className="flex -space-x-2">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <Skeleton className="h-8 w-8 rounded-full" />
+          </div>
+
+          {/* Button skeleton */}
+          <Skeleton className="h-8 w-16 rounded-md" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const WorldHubPage = () => {
   const [worlds, setWorlds] = useState<FableWorld[]>([])
+  const [loading, setLoading] = useState(true)
 
-  // Simulate loading data
+  // Fetch all agents and add their IDs to SolarPunkWorld
   useEffect(() => {
-    // In a real app, fetch data from an API here
-    setWorlds([SolarPunkWorld, ...mockWorlds])
+    const fetchAgents = async () => {
+      try {
+        const response = await apiClient.getAgents()
+
+        if (response.data && response.data.agents) {
+          // Clone SolarPunkWorld to avoid mutating the imported object
+          const updatedSolarPunkWorld = {
+            ...SolarPunkWorld,
+            // Extract agent IDs
+            agentIds: response.data.agents.map((agent) => agent.id || '').filter((id) => id !== ''),
+          }
+
+          setWorlds([updatedSolarPunkWorld, ...mockWorlds])
+        } else {
+          setWorlds([SolarPunkWorld, ...mockWorlds])
+        }
+      } catch (error) {
+        console.error('Error fetching agents:', error)
+        setWorlds([SolarPunkWorld, ...mockWorlds])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAgents()
   }, [])
+
+  // Number of skeleton cards to show during loading
+  const skeletonCount = 4
 
   return (
     <div className="container mx-auto py-8 px-4 mt-16">
@@ -165,12 +230,21 @@ const WorldHubPage = () => {
         <p className="text-muted-foreground">Explore interactive worlds with unique characters and stories</p>
       </div>
 
-      {/* Responsive grid with 4-2 cards per row based on screen size */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {worlds.map((world) => (
-          <WorldCard key={world.id} world={world} />
-        ))}
-        <WorldPlusCard />
+        {loading ? (
+          // Render skeleton cards while loading
+          Array(skeletonCount)
+            .fill(0)
+            .map((_, index) => <WorldCardSkeleton key={`skeleton-${index}`} />)
+        ) : (
+          // Render actual world cards when loaded
+          <>
+            {worlds.map((world) => (
+              <WorldCard key={world.id} world={world} />
+            ))}
+            <WorldPlusCard />
+          </>
+        )}
       </div>
     </div>
   )
