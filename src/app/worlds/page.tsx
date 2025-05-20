@@ -4,19 +4,12 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-
-// Create a mock interface that matches what we need for display
-interface MockWorld {
-  id: string
-  name: string
-  banner: string
-  lore: string
-  agentIds: string[]
-  tags: string[]
-}
+import { PlusIcon } from 'lucide-react'
+import { FableWorld } from '@/types/world'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 // Mock data based on our display needs
-const mockWorlds: MockWorld[] = [
+const mockWorlds: FableWorld[] = [
   {
     id: '12345678-1234-5678-1234-567812345678',
     name: 'Ethereal Kingdom',
@@ -24,6 +17,8 @@ const mockWorlds: MockWorld[] = [
     lore: 'Long ago, the Ethereal Kingdom was formed when ancient magic fused with advanced technology...',
     agentIds: ['agent1', 'agent2', 'agent3'],
     tags: ['magic', 'technology', 'fantasy'],
+    agentId: 'c8745678-1234-5678-1234-567812345678',
+    serverId: 'server-1',
   },
   {
     id: '22345678-1234-5678-1234-567812345678',
@@ -32,38 +27,8 @@ const mockWorlds: MockWorld[] = [
     lore: 'In the shadows of towering megacorporations, a resistance movement fights for freedom...',
     agentIds: ['agent4', 'agent5'],
     tags: ['cyberpunk', 'dystopian', 'rebellion'],
-  },
-  {
-    id: '32345678-1234-5678-1234-567812345678',
-    name: 'Aquatic Depths',
-    banner: '/images/world-3.jpg',
-    lore: 'Beneath the waves lies a society of advanced beings who have mastered the ocean...',
-    agentIds: ['agent6', 'agent7', 'agent8', 'agent9'],
-    tags: ['underwater', 'mystery', 'exploration'],
-  },
-  {
-    id: '42345678-1234-5678-1234-567812345678',
-    name: 'Desert Nomads',
-    banner: '/images/world-4.jpg',
-    lore: 'The nomads of the great desert have survived for millennia by following ancient traditions...',
-    agentIds: ['agent10', 'agent11'],
-    tags: ['desert', 'survival', 'tradition'],
-  },
-  {
-    id: '52345678-1234-5678-1234-567812345678',
-    name: 'Sky Islands',
-    banner: '/images/world-5.jpg',
-    lore: 'When the continents shattered, the islands rose into the sky, forever changing civilization...',
-    agentIds: ['agent12', 'agent13', 'agent14'],
-    tags: ['floating', 'adventure', 'discovery'],
-  },
-  {
-    id: '62345678-1234-5678-1234-567812345678',
-    name: 'Frozen Frontier',
-    banner: '/images/world-6.jpg',
-    lore: 'After the eternal frost descended, only the most resourceful communities endured...',
-    agentIds: ['agent15', 'agent16'],
-    tags: ['winter', 'survival', 'isolation'],
+    agentId: 'd9745678-1234-5678-1234-567812345678',
+    serverId: 'server-2',
   },
 ]
 
@@ -104,7 +69,7 @@ const TagsList = ({ tags }: { tags: string[] }) => {
   )
 }
 
-const WorldCard = ({ world }: { world: MockWorld }) => {
+const WorldCard = ({ world }: { world: FableWorld }) => {
   // Fallback gradient for missing images
   const gradientBackground = 'bg-gradient-to-br from-secondary to-primary/30'
 
@@ -144,8 +109,48 @@ const WorldCard = ({ world }: { world: MockWorld }) => {
   )
 }
 
+const WorldPlusCard = () => {
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  return (
+    <>
+      <div
+        onClick={() => setDialogOpen(true)}
+        className={cn(
+          'relative overflow-hidden rounded-xl aspect-[3/4] transition-all duration-300 hover:scale-[1.02] group cursor-pointer',
+          'shadow-lg border border-border/30 flex flex-col justify-center items-center',
+          'bg-gradient-to-br from-secondary to-primary/30',
+        )}
+      >
+        {/* Center plus icon */}
+        <div className="flex-grow flex items-center justify-center">
+          <PlusIcon size={64} className="text-white/70" />
+        </div>
+
+        {/* Button at bottom */}
+        <div className="p-5 w-full">
+          <Button size="sm" variant="gradient" className="w-full">
+            Create a World
+          </Button>
+        </div>
+      </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl font-cinzel">In Construction</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 text-center">
+            <p>World Creation Coming Soon</p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
 const WorldHubPage = () => {
-  const [worlds, setWorlds] = useState<MockWorld[]>([])
+  const [worlds, setWorlds] = useState<FableWorld[]>([])
 
   // Simulate loading data
   useEffect(() => {
@@ -160,10 +165,11 @@ const WorldHubPage = () => {
       </div>
 
       {/* Responsive grid with 4-2 cards per row based on screen size */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {worlds.map((world) => (
           <WorldCard key={world.id} world={world} />
         ))}
+        <WorldPlusCard />
       </div>
     </div>
   )
