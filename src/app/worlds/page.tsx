@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { PlusIcon } from 'lucide-react'
 import { FableWorld } from '@/types/world'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { SolarPunkWorld } from '@/config/world'
 
 // Mock data based on our display needs
 const mockWorlds: FableWorld[] = [
@@ -155,7 +156,7 @@ const WorldHubPage = () => {
   // Simulate loading data
   useEffect(() => {
     // In a real app, fetch data from an API here
-    setWorlds(mockWorlds)
+    setWorlds([SolarPunkWorld, ...mockWorlds])
   }, [])
 
   return (
