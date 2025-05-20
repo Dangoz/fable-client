@@ -1,4 +1,4 @@
-import { ArrowRightIcon, ChevronDownIcon, ChevronUpIcon, LinkIcon } from '@heroicons/react/24/outline'
+import { ArrowRight, ChevronDown, ChevronUp, Link as LinkIcon } from 'lucide-react'
 import clsx from 'clsx'
 import { memo, useState } from 'react'
 import { USER_NAME } from '@/config/constants'
@@ -126,7 +126,7 @@ export const ChatMessage = memo(function ChatMessage({
               {uniqueCitations.length > 1 ? 's' : ''}
             </span>
             <div className="flex items-center justify-center w-4 h-4">
-              {isSourcesExpanded ? <ChevronUpIcon className="w-3 h-3" /> : <ChevronDownIcon className="w-3 h-3" />}
+              {isSourcesExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             </div>
           </button>
 
@@ -185,7 +185,7 @@ export const ChatMessage = memo(function ChatMessage({
                 ])}
               >
                 <span>{prompt}</span>
-                <ArrowRightIcon className="w-3 h-3 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-200 flex-shrink-0" />
+                <ArrowRight className="w-3 h-3 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-200 flex-shrink-0" />
               </button>
             ))}
           </div>
