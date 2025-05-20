@@ -1,29 +1,32 @@
+<div align="center">
+
 # Fable Client
 
-Modern web client for the Fable platform that provides a seamless interface for interacting with the Fable ecosystem.
+## 🛠️ Tech Stack
 
-## Tech Stack
+<div align="center">
 
-### UI
+| Category         | Technologies                              |
+| ---------------- | ----------------------------------------- |
+| **UI**           | Tailwind CSS, shadcn/ui                   |
+| **State & Data** | Zustand, React Query                      |
+| **Core**         | Next.js, React, TypeScript, @elizaos/core |
 
-- **Tailwind CSS** - Utility-first CSS framework
-- **shadcn/ui** - Accessible component library
+</div>
 
-### State & Data
+### 🎨 UI
 
-- **Zustand** - Lightweight state management
-- **React Query** - Server state management and data fetching
+- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- **shadcn/ui** - Accessible and customizable component library
 
-### Core
+### 📊 State & Data
 
-- **Next.js** - React framework for production
-- **React** - UI framework
-- **TypeScript** - Type safety
+- **Zustand** - Lightweight and intuitive state management
+- **React Query** - Powerful server state management and data fetching
+
+### 🧠 Core
+
+- **Next.js** - React framework for production-ready applications
+- **React** - UI framework for building interactive interfaces
+- **TypeScript** - Enhanced type safety and developer experience
 - **@elizaos/core** - Core SDK for interacting with Fable services
-
-## Key Features
-
-- Deterministic UUID generation
-- Wallet address handling
-- Persistent user sessions
-- Seamless interaction with Fable ecosystem
