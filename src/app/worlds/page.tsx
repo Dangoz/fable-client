@@ -3,37 +3,16 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
-// Create a mock interface that matches what we need for display without worrying about
-// the underlying CoreWorld implementation details that we don't have access to
+// Create a mock interface that matches what we need for display
 interface MockWorld {
   id: string
   name: string
   banner: string
   lore: string
   agentIds: string[]
-  description?: string
-}
-
-// Mock data for agent profiles - in a real app this would come from API
-const mockAgentProfiles: Record<string, { name: string; image?: string }> = {
-  agent1: { name: 'Elara', image: '/images/agent-1.jpg' },
-  agent2: { name: 'Marcus', image: '/images/agent-2.jpg' },
-  agent3: { name: 'Aria', image: '/images/agent-3.jpg' },
-  agent4: { name: 'Zephyr', image: '/images/agent-4.jpg' },
-  agent5: { name: 'Nova', image: '/images/agent-5.jpg' },
-  agent6: { name: 'Thorne' },
-  agent7: { name: 'Iris' },
-  agent8: { name: 'Orion' },
-  agent9: { name: 'Luna' },
-  agent10: { name: 'Seren' },
-  agent11: { name: 'Kairo' },
-  agent12: { name: 'Astra' },
-  agent13: { name: 'Niko' },
-  agent14: { name: 'Lyra' },
-  agent15: { name: 'Sol' },
-  agent16: { name: 'Echo' },
+  tags: string[]
 }
 
 // Mock data based on our display needs
@@ -44,6 +23,7 @@ const mockWorlds: MockWorld[] = [
     banner: '/images/world-1.jpg',
     lore: 'Long ago, the Ethereal Kingdom was formed when ancient magic fused with advanced technology...',
     agentIds: ['agent1', 'agent2', 'agent3'],
+    tags: ['magic', 'technology', 'fantasy'],
   },
   {
     id: '22345678-1234-5678-1234-567812345678',
@@ -51,6 +31,7 @@ const mockWorlds: MockWorld[] = [
     banner: '/images/world-2.jpg',
     lore: 'In the shadows of towering megacorporations, a resistance movement fights for freedom...',
     agentIds: ['agent4', 'agent5'],
+    tags: ['cyberpunk', 'dystopian', 'rebellion'],
   },
   {
     id: '32345678-1234-5678-1234-567812345678',
@@ -58,6 +39,7 @@ const mockWorlds: MockWorld[] = [
     banner: '/images/world-3.jpg',
     lore: 'Beneath the waves lies a society of advanced beings who have mastered the ocean...',
     agentIds: ['agent6', 'agent7', 'agent8', 'agent9'],
+    tags: ['underwater', 'mystery', 'exploration'],
   },
   {
     id: '42345678-1234-5678-1234-567812345678',
@@ -65,6 +47,7 @@ const mockWorlds: MockWorld[] = [
     banner: '/images/world-4.jpg',
     lore: 'The nomads of the great desert have survived for millennia by following ancient traditions...',
     agentIds: ['agent10', 'agent11'],
+    tags: ['desert', 'survival', 'tradition'],
   },
   {
     id: '52345678-1234-5678-1234-567812345678',
@@ -72,6 +55,7 @@ const mockWorlds: MockWorld[] = [
     banner: '/images/world-5.jpg',
     lore: 'When the continents shattered, the islands rose into the sky, forever changing civilization...',
     agentIds: ['agent12', 'agent13', 'agent14'],
+    tags: ['floating', 'adventure', 'discovery'],
   },
   {
     id: '62345678-1234-5678-1234-567812345678',
@@ -79,6 +63,7 @@ const mockWorlds: MockWorld[] = [
     banner: '/images/world-6.jpg',
     lore: 'After the eternal frost descended, only the most resourceful communities endured...',
     agentIds: ['agent15', 'agent16'],
+    tags: ['winter', 'survival', 'isolation'],
   },
 ]
 
@@ -91,30 +76,30 @@ const AgentAvatars = ({ agentIds, maxDisplay = 3 }: { agentIds: string[]; maxDis
   return (
     <div className="flex items-center">
       <div className="flex -space-x-2">
-        {displayedAgents.map((agentId, index) => {
-          const agent = mockAgentProfiles[agentId] || { name: 'Agent' }
-          const initials = agent.name.substring(0, 1).toUpperCase()
-
-          // Determine transform class based on index
-          const hoverTransform =
-            index === 0 ? 'group-hover:-translate-y-1' : index === 1 ? 'group-hover:-translate-y-0.5' : ''
-
-          return (
-            <Avatar
-              key={agentId}
-              className={cn('border-2 border-background', 'transition-transform duration-300', hoverTransform)}
-            >
-              {agent.image ? (
-                <AvatarImage src={agent.image} alt={agent.name} />
-              ) : (
-                <AvatarFallback className="bg-gradient-to-br from-muted/70 to-muted">{initials}</AvatarFallback>
-              )}
-            </Avatar>
-          )
-        })}
+        {displayedAgents.map((agentId) => (
+          <Avatar key={agentId} className="border-2 border-background">
+            <AvatarFallback className="bg-gradient-to-br from-muted/70 to-muted" />
+          </Avatar>
+        ))}
       </div>
 
       {remainingCount > 0 && <span className="ml-2 text-xs text-white/90">+{remainingCount} more</span>}
+    </div>
+  )
+}
+
+// Component for displaying tags
+const TagsList = ({ tags }: { tags: string[] }) => {
+  return (
+    <div className="flex flex-wrap gap-2 mb-3">
+      {tags.map((tag) => (
+        <div
+          key={tag}
+          className="px-2 py-0.5 text-xs rounded-full border border-white/20 bg-gradient-to-r from-white/5 to-white/10"
+        >
+          {tag}
+        </div>
+      ))}
     </div>
   )
 }
@@ -143,10 +128,11 @@ const WorldCard = ({ world }: { world: MockWorld }) => {
 
       {/* Content */}
       <div className="relative z-10 p-5 text-white">
-        <h2 className="text-xl font-bold mb-2 line-clamp-2">{world.name}</h2>
-        <p className="text-sm opacity-90 mb-3 line-clamp-2">
-          {world.description || world.lore.substring(0, 100) + (world.lore.length > 100 ? '...' : '')}
-        </p>
+        <h2 className="text-lg font-cinzel font-medium mb-2 line-clamp-1">{world.name}</h2>
+
+        {/* Tags */}
+        <TagsList tags={world.tags} />
+
         <div className="flex justify-between items-center">
           <AgentAvatars agentIds={world.agentIds} />
           <Button size="sm" variant="gradient" className="text-xs">
@@ -164,12 +150,7 @@ const WorldHubPage = () => {
   // Simulate loading data
   useEffect(() => {
     // In a real app, fetch data from an API here
-    // For mock data, let's add descriptions
-    const worldsWithDescription = mockWorlds.map((world) => ({
-      ...world,
-      description: world.lore.substring(0, 80) + '...', // Generate description from lore
-    }))
-    setWorlds(worldsWithDescription)
+    setWorlds(mockWorlds)
   }, [])
 
   return (
@@ -178,8 +159,8 @@ const WorldHubPage = () => {
         <p className="text-muted-foreground">Explore interactive worlds with unique characters and stories</p>
       </div>
 
-      {/* Responsive grid with 5-2 cards per row based on screen size */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+      {/* Responsive grid with 4-2 cards per row based on screen size */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
         {worlds.map((world) => (
           <WorldCard key={world.id} world={world} />
         ))}
