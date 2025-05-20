@@ -11,7 +11,7 @@ const Menu = () => {
   const isMobile = useIsMobile()
 
   const pathname = usePathname()
-  const showMenu = screensWithMenu.includes(pathname as (typeof screensWithMenu)[number])
+  const showMenu = screensWithMenu.some((screen) => pathname?.startsWith(screen))
 
   if (isMobile === null) {
     return null

@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { SolarPunkWorld, MockFantasyWorld } from '@/config/world'
 import { apiClient } from '@/lib/api-client'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useRouter } from 'next/navigation'
+import { randomUUID } from '@/lib/utils'
 
 // Interface for agent data with avatar
 interface AgentWithAvatar {
@@ -62,11 +64,41 @@ const TagsList = ({ tags }: { tags: string[] }) => {
 }
 
 const WorldCard = ({ world, agentsData }: { world: FableWorld; agentsData: Record<string, AgentWithAvatar> }) => {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
   // Fallback gradient for missing images
   const gradientBackground = 'bg-gradient-to-br from-secondary to-primary/30'
 
   // Get agents data for this world
   const worldAgents = world.agentIds.map((id) => agentsData[id]).filter((agent) => agent !== undefined)
+
+  const handleWorldClick = async (e: React.MouseEvent) => {
+    // Don't trigger if the button was clicked directly (it handles its own click)
+    if ((e.target as HTMLElement).closest('button')) {
+      return
+    }
+    createGroupAndRedirect()
+  }
+
+  const createGroupAndRedirect = async () => {
+    try {
+      setLoading(true)
+      // Create a unique server ID for the group chat
+      const serverId = randomUUID()
+      // Use the world's name as the room name
+      const roomName = `${world.name} Council`
+      // Create a group chat with all agents in the world
+      await apiClient.createGroupChat(world.agentIds, roomName, serverId, 'world', { worldId: world.id })
+
+      // Redirect to the council page for this group
+      router.push(`/council/${serverId}`)
+    } catch (error) {
+      console.error('Error creating group chat:', error)
+      setLoading(false)
+      alert('Failed to create group chat. Please try again.')
+    }
+  }
 
   return (
     <div
@@ -79,6 +111,7 @@ const WorldCard = ({ world, agentsData }: { world: FableWorld; agentsData: Recor
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
+      onClick={handleWorldClick}
     >
       {/* Fallback gradient if no image */}
       {(!world.banner || world.banner.startsWith('/')) && <div className={`absolute inset-0 ${gradientBackground}`} />}
@@ -95,8 +128,8 @@ const WorldCard = ({ world, agentsData }: { world: FableWorld; agentsData: Recor
 
         <div className="flex justify-between items-center">
           <AgentAvatars agents={worldAgents} />
-          <Button size="sm" variant="gradient" className="text-xs">
-            Enter
+          <Button size="sm" variant="gradient" className="text-xs" onClick={createGroupAndRedirect} disabled={loading}>
+            {loading ? 'Loading...' : 'Enter'}
           </Button>
         </div>
       </div>
