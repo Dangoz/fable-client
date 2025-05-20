@@ -55,7 +55,7 @@ const AgentsConnection: React.FC = () => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="flex items-center px-3 py-1 rounded-full bg-slate-100/5 border border-slate-200/10 h-7 space-x-2">
+          <div className="flex items-center px-3 py-1 rounded-full bg-slate-100/5 border border-slate-200/10 h-7 space-x-2 cursor-default">
             <div className="relative h-2.5 w-2.5 flex items-center justify-center">
               <div className={cn('h-2.5 w-2.5 rounded-full', getStatusColor())} />
               {status === 'connected' && (
