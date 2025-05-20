@@ -3,50 +3,39 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { PlusIcon } from 'lucide-react'
 import { FableWorld } from '@/types/world'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { SolarPunkWorld } from '@/config/world'
+import { SolarPunkWorld, MockFantasyWorld } from '@/config/world'
 import { apiClient } from '@/lib/api-client'
 import { Skeleton } from '@/components/ui/skeleton'
 
-// Mock data based on our display needs
-const mockWorlds: FableWorld[] = [
-  {
-    id: '12345678-1234-5678-1234-567812345678',
-    name: 'Ethereal Kingdom',
-    banner: '/images/world-1.jpg',
-    lore: 'Long ago, the Ethereal Kingdom was formed when ancient magic fused with advanced technology...',
-    agentIds: [
-      'a1345678-1234-5678-1234-567812345678',
-      'a2345678-1234-5678-1234-567812345678',
-      'a3345678-1234-5678-1234-567812345678',
-    ],
-    tags: ['magic', 'technology', 'fantasy'],
-  },
-  {
-    id: '22345678-1234-5678-1234-567812345678',
-    name: 'Cyberpunk City',
-    banner: '/images/world-2.jpg',
-    lore: 'In the shadows of towering megacorporations, a resistance movement fights for freedom...',
-    agentIds: ['a4345678-1234-5678-1234-567812345678', 'a5345678-1234-5678-1234-567812345678'],
-    tags: ['cyberpunk', 'dystopian', 'rebellion'],
-  },
-]
+// Interface for agent data with avatar
+interface AgentWithAvatar {
+  id: string
+  name?: string
+  avatarUrl?: string
+}
 
 // Component for displaying overlapping agent avatars
-const AgentAvatars = ({ agentIds, maxDisplay = 3 }: { agentIds: string[]; maxDisplay?: number }) => {
+const AgentAvatars = ({ agents, maxDisplay = 3 }: { agents: AgentWithAvatar[]; maxDisplay?: number }) => {
   // Show only up to maxDisplay avatars
-  const displayedAgents = agentIds.slice(0, maxDisplay)
-  const remainingCount = agentIds.length - maxDisplay
+  const displayedAgents = agents.slice(0, maxDisplay)
+  const remainingCount = agents.length - maxDisplay
 
   return (
     <div className="flex items-center">
       <div className="flex -space-x-2">
-        {displayedAgents.map((agentId) => (
-          <Avatar key={agentId} className="border-2 border-background">
-            <AvatarFallback className="bg-gradient-to-br from-muted/70 to-muted" />
+        {displayedAgents.map((agent) => (
+          <Avatar key={agent.id} className="border-2 border-background">
+            {agent.avatarUrl ? (
+              <AvatarImage src={agent.avatarUrl} alt={agent.name || 'Agent'} />
+            ) : (
+              <AvatarFallback className="bg-gradient-to-br from-muted/70 to-muted">
+                {agent.name?.charAt(0) || '?'}
+              </AvatarFallback>
+            )}
           </Avatar>
         ))}
       </div>
@@ -72,9 +61,12 @@ const TagsList = ({ tags }: { tags: string[] }) => {
   )
 }
 
-const WorldCard = ({ world }: { world: FableWorld }) => {
+const WorldCard = ({ world, agentsData }: { world: FableWorld; agentsData: Record<string, AgentWithAvatar> }) => {
   // Fallback gradient for missing images
   const gradientBackground = 'bg-gradient-to-br from-secondary to-primary/30'
+
+  // Get agents data for this world
+  const worldAgents = world.agentIds.map((id) => agentsData[id]).filter((agent) => agent !== undefined)
 
   return (
     <div
@@ -102,7 +94,7 @@ const WorldCard = ({ world }: { world: FableWorld }) => {
         <TagsList tags={world.tags} />
 
         <div className="flex justify-between items-center">
-          <AgentAvatars agentIds={world.agentIds} />
+          <AgentAvatars agents={worldAgents} />
           <Button size="sm" variant="gradient" className="text-xs">
             Enter
           </Button>
@@ -190,6 +182,7 @@ const WorldCardSkeleton = () => {
 
 const WorldHubPage = () => {
   const [worlds, setWorlds] = useState<FableWorld[]>([])
+  const [agentsData, setAgentsData] = useState<Record<string, AgentWithAvatar>>({})
   const [loading, setLoading] = useState(true)
 
   // Fetch all agents and add their IDs to SolarPunkWorld
@@ -199,20 +192,53 @@ const WorldHubPage = () => {
         const response = await apiClient.getAgents()
 
         if (response.data && response.data.agents) {
+          // Get all agent IDs
+          const allAgentIds = response.data.agents.map((agent) => agent.id || '').filter((id) => id !== '')
+
           // Clone SolarPunkWorld to avoid mutating the imported object
           const updatedSolarPunkWorld = {
             ...SolarPunkWorld,
-            // Extract agent IDs
-            agentIds: response.data.agents.map((agent) => agent.id || '').filter((id) => id !== ''),
+            name: 'Solar Punk',
+            // Add all agent IDs to SolarPunkWorld
+            agentIds: allAgentIds,
           }
 
-          setWorlds([updatedSolarPunkWorld, ...mockWorlds])
+          setWorlds([updatedSolarPunkWorld, MockFantasyWorld])
+
+          // Fetch detailed data for each agent
+          const agentDetailsPromises = allAgentIds.map((id) =>
+            apiClient
+              .getAgent(id)
+              .then((response) => ({
+                id,
+                name: response.data.name,
+                avatarUrl: response.data.settings?.avatar,
+              }))
+              .catch((error) => {
+                console.error(`Error fetching agent ${id}:`, error)
+                return { id, name: 'Unknown', avatarUrl: undefined }
+              }),
+          )
+
+          // Wait for all agent details to be fetched
+          const agentsDetails = await Promise.all(agentDetailsPromises)
+
+          // Create a map of agent IDs to agent details
+          const agentsMap = agentsDetails.reduce(
+            (map, agent) => {
+              map[agent.id] = agent
+              return map
+            },
+            {} as Record<string, AgentWithAvatar>,
+          )
+
+          setAgentsData(agentsMap)
         } else {
-          setWorlds([SolarPunkWorld, ...mockWorlds])
+          setWorlds([SolarPunkWorld, MockFantasyWorld])
         }
       } catch (error) {
         console.error('Error fetching agents:', error)
-        setWorlds([SolarPunkWorld, ...mockWorlds])
+        setWorlds([SolarPunkWorld])
       } finally {
         setLoading(false)
       }
@@ -240,7 +266,7 @@ const WorldHubPage = () => {
           // Render actual world cards when loaded
           <>
             {worlds.map((world) => (
-              <WorldCard key={world.id} world={world} />
+              <WorldCard key={world.id} world={world} agentsData={agentsData} />
             ))}
             <WorldPlusCard />
           </>

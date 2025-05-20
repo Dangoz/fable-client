@@ -10,3 +10,18 @@ export const SolarPunkWorld: FableWorld = {
   tags: ['solarpunk', 'eco-utopia', 'sustainable'],
   agentIds: [],
 }
+
+export const MockFantasyWorld: FableWorld = {
+  id: randomUUID(),
+  name: 'Fantasy',
+  banner: '',
+  lore: 'A world of magic and adventure.',
+  tags: ['fantasy', 'adventure', 'magic'],
+  agentIds: [
+    'a1345678-1234-5678-1234-567812345678',
+    'a2345678-1234-5678-1234-567812345678',
+    'a3345678-1234-5678-1234-567812345678',
+    'a4345678-1234-5678-1234-567812345678',
+    'a5345678-1234-5678-1234-567812345678',
+  ],
+}
