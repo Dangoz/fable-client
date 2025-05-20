@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 
 const Logo = () => {
   const [width, setWidth] = useState<number>(0)
@@ -13,19 +12,17 @@ const Logo = () => {
   }, [])
 
   useEffect(() => {
-    if (width && height) {
-      return require('./logo.png')()
-    }
-  }, [width, height])
+    /* eslint-disable @typescript-eslint/no-require-imports */
+    if (width && height) return require('./nextparticle')()
+  }, [width])
 
   return (
     <div className="w-full h-full">
       <div className="w-full h-full">
-        <Image
-          alt="logo"
+        <img
           className="next-particle"
-          src="./logo_white.png"
-          data-color={'#FFFFFF'}
+          src="./logo.png"
+          data-color={'black'}
           data-particle-gap="2"
           data-gravity="0.08"
           data-noise="10"
