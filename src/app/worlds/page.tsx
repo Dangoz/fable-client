@@ -15,20 +15,20 @@ const mockWorlds: FableWorld[] = [
     name: 'Ethereal Kingdom',
     banner: '/images/world-1.jpg',
     lore: 'Long ago, the Ethereal Kingdom was formed when ancient magic fused with advanced technology...',
-    agentIds: ['agent1', 'agent2', 'agent3'],
+    agentIds: [
+      'a1345678-1234-5678-1234-567812345678',
+      'a2345678-1234-5678-1234-567812345678',
+      'a3345678-1234-5678-1234-567812345678',
+    ],
     tags: ['magic', 'technology', 'fantasy'],
-    agentId: 'c8745678-1234-5678-1234-567812345678',
-    serverId: 'server-1',
   },
   {
     id: '22345678-1234-5678-1234-567812345678',
     name: 'Cyberpunk City',
     banner: '/images/world-2.jpg',
     lore: 'In the shadows of towering megacorporations, a resistance movement fights for freedom...',
-    agentIds: ['agent4', 'agent5'],
+    agentIds: ['a4345678-1234-5678-1234-567812345678', 'a5345678-1234-5678-1234-567812345678'],
     tags: ['cyberpunk', 'dystopian', 'rebellion'],
-    agentId: 'd9745678-1234-5678-1234-567812345678',
-    serverId: 'server-2',
   },
 ]
 

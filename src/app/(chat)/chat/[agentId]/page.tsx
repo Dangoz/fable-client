@@ -1,4 +1,3 @@
-// import Chat from '@/components/chat/rag/chat'
 // import Chat from '@/components/chat/eliza/chat'
 
 interface ChatPageProps {
