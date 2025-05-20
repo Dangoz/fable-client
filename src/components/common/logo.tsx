@@ -14,13 +14,15 @@ const Logo = () => {
   useEffect(() => {
     /* eslint-disable @typescript-eslint/no-require-imports */
     if (width && height) return require('./nextparticle')()
-  }, [width])
+  }, [width, height])
 
   return (
     <div className="w-full h-full">
       <div className="w-full h-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          className="next-particle"
+          alt="logo"
+          className="next-particle invisible"
           src="./logo.png"
           data-color={'black'}
           data-particle-gap="2"
